@@ -1,0 +1,14 @@
+body {
+	background-color: #FDF6E3;
+	color: #413C2F;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+h1 {
+	border-bottom: 15px solid white;
+}
+
+h2 {
+	border-bottom: 10px solid white;
+}
