@@ -1,0 +1,518 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>OSGeo.be GeoDevEvening - How to start a QGis plugin?</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/solarized.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    
+    <style type="text/css">
+    .reveal section img { background:none; border:none; box-shadow:none; max-height: 400px; max-width: 600px; }
+    .reveal section h3 { text-transform: none; }
+    .reveal section code { font-family: 'Input Mono'; }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+      <section>
+        <section>
+        <h1>OSGeo.be GeoDevEvening</h1>
+        <h3>How to start a QGis plugin?</h1>
+        </section>
+        
+               <section>
+            <h3>Please install</h3>
+            <p>QGis 2.18 (Las Palmas)</p>
+            <p>Notepad++ (or your favorite editor)</p>
+            <h4><br>QGis plugins</h4>
+            <p>Plugin Builder<br>
+            Plugin Reloader (experimental)<br>
+            QOSM<br>
+            QuickOSM
+            </p>
+            
+            </section>
+        </section>
+
+        <!-- QGIS -->
+        <section>
+     
+        
+            <section>
+            <h3>QGis platform</h3>
+            <img src="img/qgis_platform.png"/>
+            </section>
+            
+             <section>
+        <h3>QGis & Qt versions</h3>
+        <img src="img/qgis_about.png"/>
+        </section>
+        
+        <section>
+        <h3>Python version</h3>
+        <img src="img/qgis_python_version.png"/>
+<pre><code class="hljs" data-trim contenteditable>
+> import sys
+> sys.version
+'2.7.5 (default, May 15 2013, 22:44:16) [MSC v.1500 64 bit (AMD64)]'
+        </code></pre>
+        </section>
+        
+        <section>
+        <h3>API versions</h3>
+        <h4>QGis 2</h4>
+        <p>Python 2<br>Qt 4</p>
+        <h4>QGis 3</h4>
+        <p>Python 3<br>Qt 5</p>
+        </section>
+        
+        </section>
+       
+
+        <!-- Python -->
+        <section>
+            <section>
+            <h3>Python</h3>
+            <p><a href="https://docs.python.org/2.7/">Python documentation</a></p>
+            <p><a href="https://docs.python.org/2.7/library/index.html">Python library reference</a></p>
+            </section>
+        
+            <section>
+            <h3>Numbers</h3>
+<pre><code class="hljs" data-trim contenteditable>                                                            
+> a = 1
+> type(a)
+type 'int'
+
+> b = 1.0
+> type(b)
+type 'float'
+
+> 3/2
+1
+
+> 3.0/2.0
+1.5
+
+> int(3.0/2.0)
+1
+          </code></pre>
+            </section>
+        
+        <section>
+        <h3>Text</h3>
+<pre><code class="hljs" data-trim contenteditable>                                                            
+> c = 'a'
+> type(c)
+type 'str'
+ 
+> d = "b"
+> type(d)
+type 'str'
+
+> c+d
+'ab'
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>Operators</h3>
+<pre><code class="hljs" data-trim contenteditable>                                                            
+> a = 1
+
+> a = a + 1
+> a += 1
+> a
+3
+
+> a == 4
+False
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>Lists</h3>
+<pre><code class="hljs" data-trim contenteditable>                                                            
+> l = [1, 2, 3]
+> type(l)
+type 'list'
+
+> len(l)
+3
+
+> (l[0], l[-1])
+(1, 3)
+
+> l.append(4)
+> l
+[1, 2, 3, 4]
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>More</h3>
+<pre><code class="hljs" data-trim contenteditable>                                                            
+> l = [1, 2, 3]
+
+> [i*2 for i in l if i < 3]
+[2, 4]
+
+> max(-2, 0)
+0
+
+> 'bugs:bunny'.split(':')
+['bugs', 'bunny']
+
+> import random
+> random.randint(0, 10)
+4
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>Conditionals</h3>
+<pre><code class="hljs" data-trim contenteditable>
+if a:
+    print('a')
+elif b:
+    print('b')
+else:
+    print('c')
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>Indentation</h3>
+<pre><code class="hljs" data-trim contenteditable>
+if a:
+    print('a')
+    if b:
+      print('b')
+else:
+    print('c')
+
+if a:
+    print('a')
+    if b:
+      print('b')
+    else:
+        print('c')
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>Functions</h3>
+<pre><code class="hljs" data-trim contenteditable>                                                            
+def longer(text, letterCount=3):
+    return text + text[-1]*letterCount
+    
+> longer('YOLO')
+'YOLOOOO'
+
+> longer('YOLO', 6)
+'YOLOOOOOOO'
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>Inner functions</h3>
+<pre><code class="hljs" data-trim contenteditable>
+def sumOfDoubles(list):
+    def double(number):
+        return number*2
+
+    sum = 0
+    for item in list:
+      sum += double(item)
+    return sum
+
+sum([i*2 for i in list])
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3>Object orientation</h3>
+<pre><code class="hljs" data-trim contenteditable>
+class Game(object):
+    def __init__(self, name, maxPlayers):
+        self.name = name
+        self.maxPlayers = maxPlayers
+
+    def play(self, players):
+        if players > self.maxPlayers:
+            return 'Too many players!'
+        else:
+            return 'Enjoy your game of ' + self.name + '!'
+
+stratego = Game('Stratego', 2)
+risk = Game('Risk', 6)
+
+stratego.play(3)
+# Too many players!
+
+risk.play(3)
+# Enjoy your game of Risk!
+          </code></pre>
+        </section>
+        </section>
+        
+        
+        </section>
+        
+        <!-- Qt -->
+        <section>
+        <section>
+        <h3>Qt</h3>
+        <p>Framework for graphical user interfaces<br>(and other things)</p>
+        <p><a href="https://doc.qt.io/qt-4.8/">Qt documentation</a></p>
+        <p><a href="https://doc.qt.io/qt-4.8/classes.html">Qt API reference</a></p>
+        </section>
+        
+        <section>
+        <h3>Qt designer</h3>
+        <img src="img/qt_designer.png">
+        </section>
+        
+        <section>
+        <h3>Signals / Slots</h3>
+        <img src="img/qt_signal_slot.png">
+        </section>
+
+        <section>
+        <h3><a href="https://doc.qt.io/qt-4.8/qlabel.html">QLabel</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+label = QLabel("Initial text.")
+
+label.setText("Text changed to this text.")
+label.setText("Or this.")
+          </code></pre>
+        </section>
+
+        <section>
+        <h3><a href="https://doc.qt.io/qt-4.8/qlcdnumber.html">QLCDNumber</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+scorePanel = QLCDNumber()
+
+scorePanel.display(42)
+scorePanel.display(1337)
+          </code></pre>
+        </section>
+        
+        <section>
+        <h3><a href="https://doc.qt.io/qt-4.8/qpushbutton.html">QPushButton</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+def start():
+    print('The game is on!')
+
+button = QPushButton("Start")
+button.setEnabled(True)
+
+button.clicked.connect(start)
+          </code></pre>
+        </section>
+        
+                <section>
+        <h3><a href="https://doc.qt.io/qt-4.8/qwebview.html">QWebView</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+webView = QWebView()
+
+webView.setUrl(QUrl("http://www.qgis.org"))
+webView.setHtml("")
+          </code></pre>
+        </section>
+        
+        </section>
+        
+        <!-- QGis API -->
+        <section>
+        <section>
+        <h3>QGis API</h3>
+        <p><a href="http://docs.qgis.org/2.18/en/docs/pyqgis_developer_cookbook/">PyQGis developer cookbook</a></p>
+        <p><a href="http://qgis.org/api/2.18/classQgisInterface.html">QGis API reference</a></p>
+        </section>
+        
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgisInterface.html">QgisInterface</a></h3>
+<pre><code class="hljs" data-trim contenteditable>                                                            
+> iface
+qgis._gui.QgisInterface object at 0x0000000006E7D0D07
+
+> iface.actionAddWmsLayer()
+PyQt4.QtGui.QAction object at 0x000000001B53FAE8
+
+> iface.actionAddWmsLayer().trigger()
+        </code></pre>
+        </section>
+        
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgsPoint.html">QgsPoint</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+> point1 = QgsPoint(100.0, 200.0)
+> point2 = QgsPoint(100.0, 500.0)
+
+> point1.x()
+100.0
+
+> point1.y()
+200.0
+
+> point1.distance(point2)
+300.0
+
+> point1.azimuth(QgsPoint(200.0,500.0))
+18.43494882292201
+        </code></pre>
+        </section>
+
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgsMapCanvas.html">QgsMapCanvas</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+def printPoint(self, point):
+    print(point.x(), point.y())
+
+canvas = iface.mapCanvas()
+canvas.xyCoordinates.connect(printPoint)
+        </code></pre>
+        </section>
+        
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgsMapTool.html">QgsMapTool</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+def printPoint(self, point):
+    print(point.x(), point.y())
+
+canvas = iface.mapCanvas()
+
+mapToolPoint = QgsMapToolEmitPoint(canvas)
+mapToolPoint.canvasClicked.connect(printPoint)
+
+canvas.setMapTool(mapToolPoint)
+        </code></pre>
+        </section>
+
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgsCoordinateReferenceSystem.html">QgsCoordinateReferenceSystem</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+lambert72 = QgsCoordinateReferenceSystem(31370, QgsCoordinateReferenceSystem.EpsgCrsId)
+webmercator = QgsCoordinateReferenceSystem(3857, QgsCoordinateReferenceSystem.EpsgCrsId)
+
+canvasCRS = canvas.mapRenderer().destinationCrs()
+        </code></pre>
+        </section>
+
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgsCoordinateTransform.html">QgsCoordinateTransform</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+t = QgsCoordinateTransform(wgs84, canvasCRS)
+
+transformedPoint = t.transform(QgsPoint(100.0, 200.0))
+        </code></pre>
+        </section>
+
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgsVectorLayer.html">QgsVectorLayer</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+> vectorLayer = iface.activeLayer()
+> vectorLayer
+qgis._core.QgsVectorLayer object at 0x000000001B2720D0
+
+> features = vectorLayer.getFeatures(QgsFeatureRequest(1))
+> features.next()
+qgis._core.QgsFeature object at 0x000000001B272158
+        </code></pre>
+        </section>
+        
+        <section>
+        <h3><a href="http://qgis.org/api/2.18/classQgsFeature.html">QgsFeature</a></h3>
+<pre><code class="hljs" data-trim contenteditable>
+> feature = vectorLayer.getFeatures(QgsFeatureRequest(1)).next()
+
+> feature.attribute('name')
+u'Manneken Pis'
+
+> feature.geometry().asPoint()
+(4.34999,50.845)
+        </code></pre>
+        </section>
+        </section>
+        
+        <section>
+        <section>
+        <h3>Starting a QGis plugin</h3>
+        </section>
+        
+        <section>
+        <h3>Plugin builder</h3>
+        <img src="img/qgis_plugin_builder.png"/>
+        </section>
+        
+        <section>
+        <h3>Files</h3>
+        <ul>
+            <li>metadata.txt
+            <ul style="font-size: 0.7em;"><li>Information about the plugin</li></ul>
+            </li>
+            
+            <li>__init__.py
+            <ul style="font-size: 0.7em;"><li>Classfactory</li></ul>
+            </li>
+            <li>geogame.py
+            <ul style="font-size: 0.7em;"><li>Base plugin class</li></ul>
+            </li>
+            <li>geogame_dockwidget.py
+            <ul style="font-size: 0.7em;"><li>Class for dockwidget (user interface)</li></ul>
+            </li>
+            <li>geogame_dockwidget_base
+            <ul style="font-size: 0.7em;"><li>Dockwidget UI itself (xml)</li></ul>
+            </li>
+        </ul>
+        </section>
+        
+        <section>
+        <h3>Compile resources</h3>
+        <p>Shift + right click in plugin directory, then<br>'Open command window here'</p>
+<pre style="width: 925px" ><code data-trim contenteditable>
+"C:\Program Files\QGIS 2.18\bin\pyrcc4.exe" resources.qrc > resources.py
+        </code></pre>
+        </section>
+        
+        </section>
+        </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
