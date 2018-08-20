@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>QGis as a platform</title>
+		<link rel="stylesheet" type="text/css" href="../../style.css">
+	</head>
+
+	<body>
+    <div id="header">
+      <img src="../../me.png">
+      <h1>Roel Huybrechts</h1>
+      <ul id="menu">
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/">Home</a></li>
+      </ul>
+    </div>
+
+    <h1>QGis as a platform</h1>
+    <h2>Transforming the desktop GIS for tablet use in Flanders fields</h2>
+    
+    <p>After presenting at the second FOSS4G Belgium conference in 2015, I had the opportunity to present my work on customizing the QGis interface for tablet use at the international FOSS4G conference in 2016 in Bonn, Germany as well. This article is a summary of my presentation and can be read as an extension to the slides, available below.</p>
+
+    <a name="use-case"></a>
+    <h3>Use-case</h3><p><a href="#use-case">&para;</a></p>
+    
+    <p>To be able to understand the solution presented below, a small introduction to the problem is inevitable. The tablet app I built is used by experts from the public administration to assess soil erosion in the hills of Flanders. This is a problem that is not to be underestimated as it causes issues for farmers, traffic, etc.</p>
+    
+    <p>In order to diminish the (effects of) soil erosion, the administration yearly makes a map that classifies all agricultural plots in categories based on their potential soil erosion. According to this classification the farmer using these plots is required to take various measures to limit soil erosion: for example change the direction of plowing.</p>
+    
+    <div class="center">
+        <div class="img"><img src="soil-erosion-map.png" alt="Excerpt of the potential soil erosion map"><p><span class="description">Excerpt of the potential soil erosion map per plot, with categories ranging from 'negligable' (green) to 'very high' (purple).</span></p></div>
+    </div>
+    
+    <p>When farmers disagree with the classification of their plots they can file an objection. These all end up on a desk in Brussels and need to be checked by experts in the field to assess whether they're legitimate or not. It is this process of field control that is the use-case of our tablet application.</p>
+    
+    <a name="why-we-chose-for-tablets"></a>
+    <h3>Why we chose for tablets</h3><p><a href="#why-we-chose-for-tablets">&para;</a></p>
+    
+    <p>Previously, the filed complaints where all printed out, together with a series of detailed maps of the situation and then taken to the field and annotated. Later on, these annotation were redigitized and the complaint was processed on the computer. This worked out ok if there were a hundred complaints, but doesn't scale if there are two thousand, as there were a couple of years ago.</p>
+    
+    <p>Obviously, the tablet application brings a huge gain in efficieny (and thus performance) by keeping everything digital. No resources, both paper and time, are wasted anymore printing everything out and redigitizing it later on.</p>
+    
+    <p>But the tablets bring other possibilities with them as well. Because they're digital and have a large storage capacity all complaints can be taken to the field at once. Combined with the fact we also can take area-wide maps into the field this means we do no longer need to decide beforehand which complaints we will treat on a certain day. This brings a lot of flexibility to the terrain and allows more efficient working.</p>
+    
+    <p>An extra bonus comes from the hardware point of view. As the tablets are equipped with cameras, photos can be taken of the plots to corroborate decisions and eliminate discussions afterwards. They are automatically linked to the plot that is being edited and are as such added to the dossier.</p>
+    
+    <div class="center description-right">
+        <div class="img"><img src="qgis-gps-panel.png" alt="QGis's information panel" width="172px"><p>We use the built-in QGis GPS information panel. This allow the user to automatically recenter the map on the current location, and visualise this location on the map.</p></div>
+    </div>
+    
+    <p>Last but not least, the tablets have a GPS chip inside which allows using them as a navigation device (we use <a href="http://navmii.com/" target="_blank">Navmii</a>). Next to wayfinding, this also adds some interesting functionality in QGis like centering the map on the current location or showing the current location on the map.</p>
+    
+    <a name="why-we-chose-for-qgis"></a>
+    <h3>Why we chose for QGis</h3><p><a href="#why-we-chose-for-qgis">&para;</a></p>
+    
+    <p>QGis wouldn't be the first thing on many peoples minds when confronted with the need for a tablet application. Yet we chose to develop ours as a QGis plugin instead of using other platforms or writing it from scratch. I used to word <em>platform</em> there to denote QGis because that is the way I think it should be seen.</p>
+    
+    <p>The first and foremost reason of using QGis is that it provides a solid base foundation for GIS applications that is easily accessible via an <span title="Application Programming Interface">API</span>. Plugins can be coded in C++ and Python, although the majority of plugins &mdash; as is ours &mdash; is written in the latter. QGis has been around for a few years now and as a popular desktop GIS it has been thoroughly tested.</p>
+    
+    <p class="quote">With Python and Qt, you really can build anything on top of QGis.</p>
+    <p>Secondly, QGis comes as a package bundling other components which in turn can be used in plugins. With QGis you get building blocks as GDAL (the geographical data abstraction layer) and Qt (the graphical components library). Combined with the Python scripting language, you can really build anything on top of QGis.</p>
+    
+    <p>Thirdly, QGis and its bundled components are free software, which means we can access the source code if things are unclear. They also have a vivid community around them to help if problems should arise. Lastly, there are already a lot of plugins available which we can include in our solution.</p>
+    
+    <p>A free bonus is that our application becomes cross-platform. Since it 'runs on top of QGis', as a consequence it runs on Windows, Linux and OS X.</p>
+    
+    <a name="visualising-the-data"></a>
+    <h3>Visualising the data</h3><p><a href="#visualising-the-data">&para;</a></p>
+    
+    <div class="sidenote">
+      <p>While programmers like to think in term of 'apps' and functionality, users tend to focus more on their data. The application is merely an interface to interact, and it is the only thing standing between them and their data. So it better cooperates.</p>
+    </div>
+    <p>As in any GIS application, the map is the most critical part. It takes up 90 percent of the screen space, is used all the time to navigate, consult nearly all the information and is the start point of all other user interactions.</p>
+    
+    <p>We have nearly 15 layers in our application, in various formats supported by QGis (from Geotiff to Shape and Spatialite), so we used some tricks and added tools to keep it fast and easy to use.</p>
+    
+    <p>The first thing we did was setting scale dependent visibility for all layers and styles. This is standard QGis functionality and avoids a lot of manual switching layers on or off based on the zoom level of the map. If you zoom in more details appear and if you zoom out these dissapear again in favor of an overview map.</p>
+    
+    <div class="center">
+        <div class="img"><img src="map-switch-dialog.png" alt="Dialog for switching between maps" width="400px"><p><span class="description">Custom dialogbox to be able to switch between topics of layers by touching just two buttons.</span></p></div>
+    </div>
+    
+    <div class="sidenote">
+        <p>As a basemap, we use the topographic map of Belgium combined with the street network from OpenStreetMap. These combine really well as the topographic map is missing street levels and names. At low zoom levels, OSM provides a great overview map as well.</p>
+    </div>
+    <p>While scale base visibility works great while focussing on one topic, some base layers are mutually exclusive: they can be viewed only one at a time. For example: at any given time, users are interested in consulting the soil map or the <span title="Digital Elevation Model">DEM</span>, but they can't be shown at the same time. To avoid the need of switching layers manually with the (tiny) checkboxes of the layer panel, we came up with a custom dialogbox to switch topics by pressing on of the (big) buttons. While these buttons do nothing more than enabling certain layers and disabling others, users can now switch easily between topics of layers by pressing just two buttons.</p>
+    
+    <div class="center">
+        <div class="img"><img src="dem-colorscale.png" alt="Visualisation of the DEM"><p><span class="description">DEM in a 'flat' Belgian village, with a colorscale based on the lowest and highest value within this viewport.</span></p></div>
+    </div>
+    
+    <p>Another usability trick has to do with visualising the DEM. Since Belgium is rather flat and the DEM is consulted at the zoom level of a single agricultural plot there is hardly any difference in color as the colorscale is mapped to the lowest and highest value of the entire DEM. By changing the endpoints of the layer's colorscale when zooming and panning the map we ensure users can interpret the DEM regardless of the zoom level of the map.</p>
+
+    <a name="making-it-finger-friendly"></a>
+    <h3>Making it finger friendly</h3><p><a href="#making-it-finger-friendly">&para;</a></p>
+    
+    <p>Although the tablets we use have styluses, we wanted to design the application so it can be used by using nothing more than your fingers. The theory of a finger-friendly interface is quite straightforward though: we need less things on the screen and those that remain need to be bigger. We can get a long way tweaking QGis's settings and customization options, but ended up with adding a few custom components as well.</p>
+    
+    <div class="center description-right">
+        <div class="img"><img src="tablet-layout.png" alt="Default layout of the QGis tablet application" height="400px"><p>The default layout of our QGis tablet application: in portrait mode (otherwise half of the screen is taken by the keyboard), fullscreen, with a custom toolbar on top and information panel on the side.</p></div>
+    </div>
+    
+    <p>First we started removing stuff we don't need: we removed all panels (via the View, Panels menu) and all toolbars we didn't need (again via the View, Toolbars menu). You can also remove parts of toolbars, keeping only the buttons you actually need: go to the Settings, Customization menu and enable customisation. This way we can also remove the statusbar, saving some space at the bottom of the screen.</p>
+    
+    <div class="sidenote">
+      <p>While increasing the font size makes dropdowns (comboboxes) easier to hit they have the disadvantage that at least two taps are needed to change them and users cannot see the available options without touching them. When having only a limited number of choices, a series of toggle buttons is usually a better choice.</p>
+    </div>
+    <p>Then it's important to make everything bigger, so it's easier to hit by using your fingers. The trick here is twofold: by increasing the icon size to 64px (via Settings, Options, General) not only the icons get bigger, but as a consequence the buttons containing them get bigger too. The same holds for increasing the font size: the text gets bigger, but for example dropdown buttons are easier to touch as well.</p>
+        
+    <p>Lastly, we added two custom components: a single toolbar grouping all actions (both standard QGis actions as well as custom ones) that can be triggered by the user, and a sidepanel showing all available information of a single plot and the actions associated with it. We'll discuss these custom components later on.</p>
+    
+    <a name="minimizing-annoyance"></a>
+    <h3>Minimizing annoyance</h3><p><a href="#minimizing-annoyance">&para;</a></p>
+
+    <p>When designing a tablet application for heavy use in the field &mdash; in this case, this can be taken quite literally &mdash; we have to think like a pro user. Try to live with it for a day, they have to use it <em>every</em> day. If you've thrown it out of the window by noon, it's not good enough.</p>
+    
+    <p>What we're trying to achieve is minimizing the annoyance: because when you're standing with your cold feet in a muddy field, we want to get maximum results by hitting the minimum amount of buttons. Using the scale-based visibility of layers and styles avoids a lot of manually switching layers as users zoom in and out. And by grouping all available information on a plot in one easily accessible place, users don't need to manually select layers or features to get the information they need.</p>
+    
+    <p class="quote">When you think about it, changing something in GIS is really hard.</p>
+    <p>We also provide an easy way to update the details of a certain plot, for example to enter an advice. This can be saved to the database with a single tap on 'save', a huge timesaver. When you think about it, changing something in (Q)GIS is tedious: you have to select the layer of the feature you want to change, have to enable edit mode, select the feature, change what you want to change, save the layer and possibly disable edit mode again. Most of the time though, people just want to change a value. They can always change it again later.</p>
+    
+    <p>Searching is another important feature. Users want to find plots of a specific farmer fast and easily. Since searches by name cannot be required to be an exact match, we could not use indexed searching leading to very poor performance. By using SQLite's <a href="https://sqlite.org/fts3.html" target="_blank">full text search</a> functionality, we were able to provide fast search functionality in our application.</p>
+    
+    <p>One of the other design principles is that everything should work offline. This saves us the cost of a wireless connection and guarantees we can work everywhere, regardless of network coverage. It's also beneficial to the performance of the application since everything is available on the device itself. Downsides include that this approach needs a fairly big amount of storage space on the devices to hold all the maps, including orthoimagery. In total our projects takes up over 30GB. Another downside would be that once the tablets are installed, the maps cannot easily be updated: but since our basemaps don't change that often this is not a problem in our situation. We have only one layer with data that changes often (the one holding all information of the plots) and this <em>is</em> synchronized (we'll discuss this later).
+    
+    <a name="adding-custom-components"></a>
+    <h3>Adding custom components</h3><p><a href="#adding-custom-components">&para;</a></p>
+    
+    <p>By adding a few custom components to our adjusted QGis interface, we take the step from 'works ok' to 'I love my new field companion'. We added three custom components, each with a very different scope: a toolbar, an informationpanel on the side and a pop-up edit window.</p>
+    
+    <div class="center">
+        <div class="img"><img src="toolbar.png" alt="Custom toolbar"><p><span class="description">Custom toolbar we added to access globally available actions. Notice the purple icons are standard QGis actions.</span></p></div>
+    </div>
+    
+    <p>The toolbar sits at the top of the screen and groups actions that can be triggered by the user at any time, regardless of the selection of a specific agricultural plot. It includes actions like switching the map view, drawing on the map, searching for a farmer, zooming in and out and switching the map <em>modes</em> from selecting (identifying) to panning or measuring and vice versa. By using custom, hand drawn icons, the toolbar brings a unified 'app' feeling. By including standard QGis actions into the toolbar but giving them a new icon, they fit in with ease.</p>
+    
+    <div class="center description-right">
+        <div class="img"><img src="sidepanel.png" alt="Custom sidepanel" height="400px"><p>Custom sidepanel grouping all information and actions of a selected agricultural plot. As the tablets are to be used in portrait mode to save screen space when the keyboard is enabled, this panel is designed to be narrow and tall to leave enough room on the screen for the map.</p></div>
+    </div>
+    
+    <p>Our custom sidepanel pops up when users select a specific plot, either by identifying it on the map or choosing it from search results. It shows all available information of the plot grouped together in a set of general fields at the top and multiple tabs with more detail at the bottom. On the very top of the panel there are four buttons with actions linked specifically to this plot: taking a photo, zoom-to-plot, show the filed objection and open the edit window.</p>
+    
+    <div class="center">
+        <div class="img"><img src="edit-window.png" alt="Custom dialog for editing a parcel's information"><p><span class="description">Editing the details of an objection is done inside a custom edit dialog. Note the separation between read-only fields on the right versus editable fields on the left. Also note the extra minimize button on the top left.</span></p></div>
+    </div>
+    
+    <p>One of the key goals of the application is to be able to handle objections in the field. This means assessing the soil erosion and subsequently forming an advice on whether the objection is legitimate or not. This advice is to be entered in the field, allowing fast follow-up. To be able to enter the advice on the tablet with minimum effort we built a custom pop-up dialog, designed as 'function over form'.</p>
+    
+    <p>The first thing to notice is that the dialog separates read-only fields used as reference information on the right, versus fields that need filling in on the left. This makes it clear which data needs to be provided in order to save the advice, ready for further processing later on. </p>
+    
+    <p>The fact that the most important fields are on the left of the dialog allows the user to move the dialog off the right of the screen (over the sidepanel) and have both the map and the editable fields in the dialog in view at the same time. With the extra minimize button at the top-left of the dialog, it can temporarily be hidden entirely. The edit button in the sidepanel doubles as a restore button to reopen a minimized edit dialog.</p>
+    
+    <a name="data-synchronisation"></a>
+    <h3>Data synchronisation</h3><p><a href="#data-synchronisation">&para;</a></p>
+    
+    <p>Having multiple experts in the field all using the same data, and providing full offline support including editing, demands for a solid solution to keep everything in sync. We need to introduce a single point of truth, a master version of the dataset if you will, for everyone to work on, avoiding chaos both in the database and on the terrain.</p>
+    
+    <p>Instead of developing our own solution, I implemented the <a href="https://github.com/Oslandia/qgis-versioning" target="_blank">QGis versioning</a> plugin by Oslandia. This transforms vector layers into a versioned database schema allowing checkouts for offline editing and differential updates. We have a master table in PostGIS on the server and all tablets have a local working copy of this table in Spatialite.</p>
+    
+    <p>In comparison with, for example, <a href="http://geogig.org/" target="_blank">GeoGig</a>, this had a number of advantages for us at the time. Since the QGis versioning plugin uses as standard PostGIS database serverside, we could reuse our existing infrastructure for this project and simply add a new schema. This way we didn't need to deploy new software on the server.</p>
+    
+    <p>On the clients we had the advantage of having Spatialite working copies, which is natively supported in QGis. This removes the need for (expensive) import-export operations on every commit or update.
+    
+    <p>The result is a fairly efficient syncing solution: since only the differences between the datasets on the client and the server are to be transferred, this is quite fast - even with our dataset of a few hundred MB.</p>
+    
+    <p>This way changes made in the field by your collegues end up on your tablet and, since we use the exact same software on the desktop, in the office too, ready for postprocessing.</p>
+    
+    <p>As a free bonus, the versioned database schema provides a full history at feature (in our case agricultural plot) level. This allows to reconstruct who changed what and when, later on. This has proven to be very valuable when things are unclear.</p>
+    
+    <a name="see-also"></a>
+    <h3>See also</h3><p><a href="#see-also">&para;</a></p>
+    <ul>
+        <li><a href="slides.pdf" target="_blank">Slides in PDF format</a></li>
+        <li><a href="http://ftp5.gwdg.de/pub/misc/openstreetmap/FOSS4G-2016/foss4g-2016-1338-qgis_as_a_platform_transforming_the_desktop_qgis_for_tablet_use_in_flanders_fields-hd.mp4" target="_blank">Videorecording of my presentation at FOSS4G Bonn</a></li>
+        <li><a href="https://github.com/DOV-Vlaanderen/erosiebezwaren" target="_blank">Sourcecode of the plugin on Github</a></li>
+    </ul>
+    
+    <p class="end">&mdash; Roel</p>
+  
+    <div id="summary">
+        <p>Jump to</p>
+        <ul>
+            <li><a href="#top">QGis as a platform</a></li>
+            <li><a href="#use-case">Use-case</a></li>
+            <li><a href="#why-we-chose-for-tablets">Why we chose for tablets</a></li>
+            <li><a href="#why-we-chose-for-qgis">Why we chose for QGis</a></li>
+            <li><a href="#visualising-the-data">Visualising the data</a></li>
+            <li><a href="#making-it-finger-friendly">Making it finger friendly</a></li>
+            <li><a href="#minimizing-annoyance">Minimizing annoyance</a></li>
+            <li><a href="#adding-custom-components">Adding custom components</a></li>
+            <li><a href="#data-synchronisation">Data synchronisation</a></li>
+        </ul>
+    </div>
+
+	</body>
+</html>

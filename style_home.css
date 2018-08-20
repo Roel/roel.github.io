@@ -1,0 +1,19 @@
+h2 {
+  margin-top: 24px;
+}
+
+h3 {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-bottom: 0px;
+  font-size: 1rem;
+  display: inline;
+}
+
+h3 + p {
+  display: inline-block;
+  margin: 0;
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 0;
+}
