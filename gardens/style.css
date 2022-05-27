@@ -25,6 +25,7 @@ p.link {
 a:link, a:hover, a:visited, a:focus {
     font-size: 1.2rem;
     color: white;
+    opacity: 60%;
 }
 
 
