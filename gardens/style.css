@@ -10,10 +10,21 @@ h1 {
     text-align: center;
 }
 
-p, a {
+p {
     font-size: 1.6rem;
     line-height: 1.7;
     font-family: 'Lato', sans-serif;
+    max-width: 80vw;
+    margin: 0 auto;
+}
+
+p.link {
+    text-align: right;
+}
+
+a:link, a:hover, a:visited, a:focus {
+    font-size: 1.2rem;
+    color: white;
 }
 
 
