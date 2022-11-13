@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ticket to Ride Belgium</title>
+    <link rel="stylesheet" type="text/css" href="../../style.css">
+</head>
+
+<body>
+    <div id="header">
+        <img src="../../me.png">
+        <h1>Roel Huybrechts</h1>
+        <ul id="menu">
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/">Home</a></li>
+        </ul>
+    </div>
+
+    <h1>Ticket to Ride Belgium</h1>
+    <h2>The making of a board game map</h2>
+
+    <div class="center">
+        <div class="img"><img src="img/ticket-to-ride.png" alt="Ticket to Ride, Belgium style.">
+            <p><span class="description">Ticket to Ride, Belgium style.</span></p>
+        </div>
+    </div>
+
+    <p>This is not a map. This is hours of fun on a sheet of paper. Met with a lot of free time during one of the past
+        lockdowns, I decided to make a long lasting dream come true. Combining my love of board games with my knowledge
+        of map making and the railway enthusiasm of my friend, we finally set about creating our own version the Ticket
+        to Ride board game, Belgium style.</p>
+
+    <a name="ticket-to-ride"></a>
+    <h3>Ticket to Ride rules</h3>
+    <p><a href="#ticket-to-ride">&para;</a></p>
+
+    <p>It would take us too far to explain all the rules of Ticket to Ride, but it boils down to getting routes (which
+        are two random cities you need to connect to one another), drawing coloured cards that match the segments and
+        then putting your trains on the board. In the end points are rewarded for each completed route, each segment and
+        extra points for the shareholders of the railway companies.</p>
+
+    <a name="first-steps"></a>
+    <h3>First steps</h3>
+    <p><a href="#first-steps">&para;</a></p>
+
+    <p>So, how does one go about making a board game map? Not only does the map have to look good, it also has to be the
+        right size and scale, and most importantly is has to be playable. This adds some extra constraints, like the
+        number of segments, the length of the segments, the distribution of the colours, and so on.</p>
+
+    <p>One starts simple, in QGis with a printout of country borders and railways from OpenStreetMap in the same aspect
+        ratio as the Ticket to Ride board. Using <span class="code">posterazor</span>, we then printed this to multiple
+        A4 sheets and with scissors and tape transformed it into a map the exact size of the board. This can be used to
+        identify possible railway lines to use in the game, as well as key intersections. Using the trains from the game
+        we could also estimate the length of segments between intersections.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/first-steps.png"
+                alt="First printed version of the map, with trains on it to determine intersections and segments.">
+            <p><span class="description">First printed version of the map, with trains on it to determine intersections
+                    and segments.</span></p>
+        </div>
+    </div>
+
+    <p>Once we identified the segments and intersections (cities) to use, the map was exported from QGis as SVG and
+        imported into Inkscape, where we could add the rectangles. From then on, the map would be made up of two parts:
+        the basemap (which was still very basic at this point) made in QGis, and an overlay with the 'game' parts made
+        in Inkscape. Both are rasterized as PNG and combined in GIMP.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/second-iteration.png"
+                alt="Second iteration of the map, with intersections and segments printed on it. No colours or labels yet.">
+            <p><span class="description">Second iteration of the map, with intersections and segments printed on it. No
+                    colours or labels yet.</span></p>
+        </div>
+    </div>
+
+    <a name="colouring-segments"></a>
+    <h3>Colouring the segments</h3>
+    <p><a href="#colouring-segments">&para;</a></p>
+
+    <p>While identifying possible segments and intersections was initially done just by knowledge of the rail network
+        and fiddling with the trains, somewhere around this point we started to realise that in order for the game to be
+        playable, we'd need to match the original games' number of rectangles, and also the distribution of rectangles
+        into segments (e.g. we could not only have short or long segments) and the distribution of colours to segments
+        (since they need to match with the available cards).</p>
+
+    <div class="center">
+        <div class="img"><img src="img/with-pencil-colours.png"
+                alt="Printed map with segments coloured in with pencil.">
+            <p><span class="description">Printed map with segments coloured in with pencil.</span></p>
+        </div>
+    </div>
+
+    <p>After some iterations, which we went through by printing and colouring (with pencils due to lack of colour
+        printer), we settled on what more or less resembles the final result. The intersections and the segments were
+        final now, both in length and colour.</p>
+
+    <p>Railway connaisseurs will notice that not all of the segments on the map actually still exist today, or have even
+        existed in the past. For reasons of gameplay we decided not to be too strict in following lines you can ride
+        today. For example the line Calais - De Panne does not exist anymore today, which also holds true for De Panne -
+        Lens. Also the line Gent - Vlissingen via Terneuzen and a ferry across the Westerschelde (sadly) does not exist.
+    </p>
+
+    <div class="center">
+        <div class="img"><img src="img/first-digital-colour.png" alt="Segments now also coloured in digital version.">
+            <p><span class="description">Once the segments and colours were fixed, they were transferred to the digital
+                    version too.</span></p>
+        </div>
+    </div>
+
+    <a name="base-map"></a>
+    <h3>Making of the base map</h3>
+    <p><a href="#base-map">&para;</a></p>
+
+    <p>The segments and colours being fixed, we could also adapt the digital version of the map accordingly. Rectangles
+        were adjusted and coloured, and also the basemap got some upgrades. It now shows water - both the sea and inland
+        rivers, canals and lakes - and the styling of the countries was improved. The height data from SRTM is the
+        cherry on top. Even if I do say so myself - and I own a lot of board games with maps - this beats any of them in
+        level of detail and sense of reality.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/base-map.png" alt="Digital version of the map with improved base map.">
+            <p><span class="description">Digital version of the map with improved base map.</span></p>
+        </div>
+    </div>
+
+    <a name="new-routes"></a>
+    <h3>New routes</h3>
+    <p><a href="#new-routes">&para;</a></p>
+
+    <p>With a new map for the game, we also needed new routes. Routes consist of two random cities on the map, which you
+        then have to connect to each other in order to score the points attributed to the route. It does not have to be
+        the shortest connection, any connection will do. The game makes a distinction between <em>long</em> routes and
+        <em>short</em> routes. Each player gets assigned one long route at the start of the game and can then get as
+        many short routes as they like or need.
+    </p>
+
+    <p>We realised that also the routes needed some attention for the game to be playable. We needed a number of long
+        routes of a certain length - that also do not overlap too much - and many shorter routes, length-wise
+        distributed similar to the routes of the original game. We also needed to make sure that every station was in at
+        least one route. The number of points that can be scored by a route is the length of the shortest distance (in
+        rectangles) between the two stations and equals the price.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/routes.png"
+                alt="Routes are styles as train tickets. Their price indicates their score, while their class (1st or 2nd) indicated whether it's a long or a short route.">
+            <p><span class="description">Routes are styles as train tickets. Their price indicates their score, while
+                    their class (1st or 2nd) indicated whether
+                    it's a long or a short route.</span></p>
+        </div>
+    </div>
+
+    <p>This sounded to me like a routing problem: in fact the game board was a very simple graph network where each
+        intersection is a node and each segment is an edge with a cost equal to the number of rectangles in the segment.
+        I created this network in a table in a PgRouting-enabled database, which then allowed to execute shortest-path
+        queries against it. For example, the database would be able to calculate the shortest distance (in rectangles)
+        between any two stations.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/pgrouting-shortest-path.png"
+                alt="Shortest path query finding the in-game route distance between two stations.">
+            <p><span class="description">Shortest path query finding the in-game route distance between Arlon and
+                    Charleville-Mésières.</span></p>
+        </div>
+    </div>
+
+    <p>With some more complex queries I was able to use this to generate possible routes: you just let PgRouting
+        calculate the shortest distance between any combination of stations and sort them on length. This list then
+        makes the selection of a few long and any number of short routes very easy and also made it easy to have a good
+        route length distribution. Some additional checks were implemented to make sure every station was included in at
+        least one of the routes we selected.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/pgrouting-longest-routes.png"
+                alt="Query to list all available routes in the game, sorted on length.">
+            <p><span class="description">Query to list all available routes in the game, sorted on length.</span></p>
+        </div>
+    </div>
+
+    <p>Finally the routable network allowed for one last optimisation: determining which segments should be duplicated.
+        As you can see on the map, some of the segments are double: they can be used by two players. To identify the
+        segments that qualify for duplication I adjusted the previous query to get all segments used in each route,
+        count how many times a segment was used and sort on that. This list could then be used to double segments until
+        we reached the number of rectangles of the original game.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/pgrouting-most-used-segments.png"
+                alt="Query to list the segments that occur in the most routes, sorted on the times a segment belongs to a shortest route.">
+            <p><span class="description">Query to list the segments that occur in the most routes, sorted on the times a
+                    segment belongs to a shortest route.</span></p>
+        </div>
+    </div>
+
+    <div class="center">
+        <div class="img"><img src="img/pgrouting-most-used-segments-output.png"
+                alt="Output of the previous query, showing the most used segments in the game.">
+            <p><span class="description">Output of the previous query, showing the most used segments in the
+                    game.</span></p>
+        </div>
+    </div>
+
+    <a name="shares"></a>
+    <h3>Railway company shares</h3>
+    <p><a href="#shares">&para;</a></p>
+
+    <p>The shares are an addition we borrowed from Ticket to Ride Pennsylvania. In short, each segment can be operated
+        by a number of railway companies. When claiming a segment as a player you get a share of one of the companies
+        operating it. In the end points are awarded for the majority shareholders of all companies. This adds an extra
+        element to the game: you have to decide whether to go all-in on a larger company or diversify your shares across
+        multiple, while also impacting your choice of route.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/shares.png"
+                alt="Scoring table of the railway company shares at the end of the game.">
+            <p><span class="description">Scoring table of the railway company shares at the end of the game. For each
+                    company the table lists the number of available shares, and the score that is awarded to the player
+                    with the most shares (rank 1 to 5).</span></p>
+        </div>
+    </div>
+
+    <a name="details"></a>
+    <h3>Details make it shine</h3>
+    <p><a href="#details">&para;</a></p>
+
+    <p>Lastly I want to focus on some details in the board that really finish it off. Obviously the 'Ticket to Ride' on
+        top is styled after the signs you see on the station platform. The cities on the map are marked with the well
+        known NMBS star you can also spot in the Brussels North station, and the font resembles the yellow segment
+        displays found on the platforms announcing the trains.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/ticket-to-ride-station.png"
+                alt="Ticket to Ride styled after a station sign found at the platforms.">
+            <p><span class="description">Ticket to Ride styled after a station sign found at the platforms.</span></p>
+        </div>
+    </div>
+
+    <div class="center">
+        <div class="img"><img src="img/city-style.png"
+                alt="Cities or intersections are style with the well known NMBS star, also to be found in the Brussels North station. The font resembles the yellow segment displays from the platforms.">
+            <p><span class="description">Cities or intersections are styled with the well known NMBS star, also to be
+                    found in the Brussels North station. The font resembles the yellow segment displays from the
+                    platforms.</span></p>
+        </div>
+    </div>
+
+    <p>Certain rectangles require a locomotive to be handed in in order to use them. Obviously we needed a Belgian one,
+        so I drew a 'Type 18' (NMBS HLE 18 from Siemens). Some segments in the game represent tunnels, so I put lights
+        on the trains to emphasise this - and made sure that they're always using the left track.</p>
+
+    <div class="center">
+        <div class="img"><img src="img/locomotive-style.png"
+                alt="Locomotives styled after the common NMBS Type 18 Siemens locomotives.">
+            <p><span class="description">Locomotives styled after the common NMBS Type 18 Siemens locomotives.</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="center">
+        <div class="img"><img src="img/tunnel-style.png"
+                alt="Tunnels are styled to be recogniseable and sport trains with lights.">
+            <p><span class="description">Tunnels are styled to be recogniseable and sport trains with lights. In
+                    Belgium, trains normally use the left track.</span>
+            </p>
+        </div>
+    </div>
+
+    <p>Also the scoring panel that shows the number of points you get for each segment - the longer the segment, the
+        higher the score - needed some attention. For each segment length I drew a train with the same number of
+        carriages, consisting of a Type 18 locomotive and M6 carriages, and made sure it was realistic and drive-able in
+        both directions. There is even place for your bike on the longer ones!</p>
+
+    <div class="center">
+        <div class="img"><a href="img/segment-scoring.png" target="_blank"><img src="img/segment-scoring.png"
+                    alt="Scoring panel for the segments."></a>
+            <p><span class="description">Scoring panel for the segments. Click to enlarge!</span>
+            </p>
+        </div>
+    </div>
+
+    <p class="end">&mdash; Roel</p>
+
+    <div id="summary">
+        <p>Jump to</p>
+        <ul>
+            <li><a href="#top">Ticket to Ride Belgium</a></li>
+            <li><a href="#ticket-to-ride">Ticket to Ride rules</a></li>
+            <li><a href="#first-steps">First steps</a></li>
+            <li><a href="#colouring-segments">Colouring the segments</a></li>
+            <li><a href="#base-map">Making of the base map</a></li>
+            <li><a href="#new-routes">New routes</a></li>
+            <li><a href="#shares">Railway company shares</a></li>
+            <li><a href="#details">Details make it shine</a></li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

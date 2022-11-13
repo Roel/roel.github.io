@@ -133,7 +133,7 @@ span.description {
   padding: 5px;
 }
 
-div.img > img {
+div.img img {
   background-color: #ffffff;
   padding: 10px;
   display: block;
