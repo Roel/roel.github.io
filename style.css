@@ -298,6 +298,14 @@ div.sidenote > p {
 }
 
 @media screen and (max-width: 1080px) {
+    body {
+      max-width: 90%;
+    }
+
+    div.img > p {
+      font-size: unset;
+    }
+
     div#summary {
         display: none;
     }
