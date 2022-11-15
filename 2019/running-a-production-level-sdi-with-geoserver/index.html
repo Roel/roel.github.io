@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Running a production level SDI with Geoserver</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+</head>
+
+<body>
+  <div id="header">
+    <img src="../../me.png">
+    <h1>Roel Huybrechts</h1>
+    <ul id="menu">
+      <li><a href="/contact">Contact</li>
+      <li><a href="/">Home</a></li>
+    </ul>
+  </div>
+
+  <h1>Running a production level SDI with Geoserver</h1>
+  <h2>How we run a 99.5% uptime SDI at Databank Ondergrond Vlaanderen</h2>
+
+  <p>At the 2019 FOSS4G-BE conference I gave a rather technical talk about how we went about setting up our <span
+      title="Spatial Data Infrastructure">SDI</span> at Databank Ondergrond Vlaanderen. Our metadata and OGC services
+    offered over 1600 layers at the time and served 2.5 million requests each week - and this has only increased since.
+  </p>
+
+  <p>In the talk I explained which components we use, from PostGIS databases, Minio S3 file storage to Geoserver and
+    Geonetwork. I also discuss the various environments we have (development, <span title="Quality Assurance">QA</span>
+    and production) and how our release and deploy procedures work. I also shed some light on our custom Geoserver
+    build: this is not to move away from the official Geoserver project, but instead make it better while also allowing
+    our fixes to hit production faster.</p>
+
+  <p>Next up is the clustering: all our Geoserver endpoints are not single machines but clusters of multiple nodes. A
+    loadbalancer distributes the load between the nodes, allowing us to scale to more users. I explain some lessons we
+    learned while finding our the best clustering setup.</p>
+
+  <p>A data publication infrastructure needs data (obviously) and this requires procedures too: not only the software
+    needs to be tested and validated before it can hit production, so does the data that we publish. This is why we have
+    two entirely separate Geoserver instances per environment: a work instance where the data is prepared and the
+    services can be tested and a publication environment that is to be used by end users or integrators. The link
+    between the two is made by a new Geoserver community module we developed. In Taskmanager you can describe your
+    datapublication flows once, and then run them with a single click or even automatically. When all tests pass, this
+    allows for easy data publication and updating, while keeping both instances separate.</p>
+
+  <p>With data comes metadata: data about the data that describe its origins, quality, owner and contact person. Since
+    we believe metadata to be best kept as close to the data as possible, we developed a new Geoserver community module
+    for this too (meanwhile promoted to extension). The Metadata module adds a tab to each layer for you to fill in its
+    metadata, with support for powerfull templating. The metadata is then published with the built-in CSW service of
+    Geoserver, and will be automatically published together with the data itself using Taskmanager. In the end it is
+    harvested by Geonetwork on a regular basis, so this is kept up-to-date automatically too.</p>
+
+  <a name="see-also"></a>
+  <h3>See also</h3>
+  <p><a href="#see-also">&para;</a></p>
+  <ul>
+    <li><a href="slides/foss4g_geoserver_sdi.pdf" target="_blank">Slides in PDF format</a></li>
+    <li><a href="https://www.dov.vlaanderen.be/page/geoserver-task-manager" target="_blank">Page about Taskmanager on
+        the DOV website</a></li>
+    <li><a href="https://docs.geoserver.org/stable/en/user/community/taskmanager/index.html" target="_blank">Geoserver
+        Taskmanager documentation</a></li>
+    <li><a href="https://docs.geoserver.org/stable/en/user/extensions/metadata/index.html" target="_blank">Geoserver
+        Metadata documentation</a></li>
+  </ul>
+
+  <p class="end">&mdash; Roel</p>
+
+</body>
+
+</html>
