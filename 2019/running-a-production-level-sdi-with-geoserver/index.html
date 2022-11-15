@@ -28,6 +28,10 @@
     million requests each week - and this has only increased since.
   </p>
 
+  <a name="components-clustering"></a>
+  <h3>Components and clustering</h3>
+  <p><a href="#components-clustering">&para;</a></p>
+
   <p>In the talk I explained which components we use, from PostGIS databases, Minio S3 file storage to Geoserver and
     Geonetwork. I also discuss the various environments we have (development, <span title="Quality Assurance">QA</span>
     and production) and how our release and deploy procedures work. I also shed some light on our custom Geoserver
@@ -38,6 +42,10 @@
     loadbalancer distributes the load between the nodes, allowing us to scale to more users. I explain some lessons we
     learned while finding our the best clustering setup.</p>
 
+  <a name="taskmanager"></a>
+  <h3>Data publication</h3>
+  <p><a href="#taskmanager">&para;</a></p>
+
   <p>A data publication infrastructure needs data (obviously) and this requires procedures too: not only the software
     needs to be tested and validated before it can hit production, so does the data that we publish. This is why we have
     two entirely separate Geoserver instances per environment: a work instance where the data is prepared and the
@@ -45,6 +53,10 @@
     between the two is made by a new Geoserver community module we developed. In Taskmanager you can describe your
     datapublication flows once, and then run them with a single click or even automatically. When all tests pass, this
     allows for easy data publication and updating, while keeping both instances separate.</p>
+
+  <a name="metadata"></a>
+  <h3>Metadata management</h3>
+  <p><a href="#metadata">&para;</a></p>
 
   <p>With data comes metadata: data about the data that describe its origins, quality, owner and contact person. Since
     we believe metadata to be best kept as close to the data as possible, we developed a new Geoserver community module
@@ -67,6 +79,16 @@
   </ul>
 
   <p class="end">&mdash; Roel</p>
+
+  <div id="summary">
+    <p>Jump to</p>
+    <ul>
+      <li><a href="#top">Running a production SDI</a></li>
+      <li><a href="#components-clustering">Components and clustering</a></li>
+      <li><a href="#taskmanager">Data publication</a></li>
+      <li><a href="#metadata">Metadata</a></li>
+    </ul>
+  </div>
 
 </body>
 
