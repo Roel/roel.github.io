@@ -40,7 +40,7 @@
 
   <p>Next up is the clustering: all our Geoserver endpoints are not single machines but clusters of multiple nodes. A
     loadbalancer distributes the load between the nodes, allowing us to scale to more users. I explain some lessons we
-    learned while finding our the best clustering setup.</p>
+    learned while finding the best clustering setup.</p>
 
   <a name="taskmanager"></a>
   <h3>Data publication</h3>
@@ -61,7 +61,7 @@
   <p>With data comes metadata: data about the data that describe its origins, quality, owner and contact person. Since
     we believe metadata to be best kept as close to the data as possible, we developed a new Geoserver community module
     for this too (meanwhile promoted to extension). The Metadata module adds a tab to each layer for you to fill in its
-    metadata, with support for powerfull templating. The metadata is then published with the built-in CSW service of
+    metadata, with support for powerful templating. The metadata is then published with the built-in CSW service of
     Geoserver, and will be automatically published together with the data itself using Taskmanager. In the end it is
     harvested by Geonetwork on a regular basis, so this is kept up-to-date automatically too.</p>
 
