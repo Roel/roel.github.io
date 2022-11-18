@@ -7,6 +7,15 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.1.0/dist/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.1.0/ol.css">
+
+    <style>
+        div#map {
+            width: 620px;
+            height: 412px;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,8 +32,9 @@
     <h2>The making of a board game map</h2>
 
     <div class="center">
-        <div class="img"><img src="img/ticket-to-ride.png" alt="Ticket to Ride, Belgium style.">
-            <p><span class="description">Ticket to Ride, Belgium style.</span></p>
+        <div class="img">
+            <div id="map"></div>
+            <p><span class="description">Ticket to Ride, Belgium style. <br> It's zoomable.</span></p>
         </div>
     </div>
 
@@ -295,6 +305,45 @@
             <li><a href="#details">Details make it shine</a></li>
         </ul>
     </div>
+
+    <script type="text/javascript">
+        var map = new ol.Map({
+            target: 'map',
+            controls: [],
+            layers: [
+                new ol.layer.Group({
+                    title: 'Overlay',
+                    layers: [
+                        new ol.layer.Tile({
+                            title: 'Overlay',
+                            // opacity: 0.7,
+                            source: new ol.source.TileImage({
+                                attributions: '',
+                                tileGrid: new ol.tilegrid.TileGrid({
+                                    extent: [0, -12378, 18614, 0],
+                                    origin: [0, -12378],
+                                    resolutions: [128, 64, 32, 16, 8, 4, 2],
+                                    tileSize: [256, 256]
+                                }),
+                                tileUrlFunction: function (tileCoord) {
+                                    return ('./map/{z}/{x}/{y}.png'
+                                        .replace('{z}', String(tileCoord[0]))
+                                        .replace('{x}', String(tileCoord[1]))
+                                        .replace('{y}', String(- 1 - tileCoord[2])));
+                                },
+                            })
+                        }),
+                    ]
+                }),
+            ],
+            view: new ol.View({
+                center: [9307.000000, -6189.000000],
+                resolution: 30.000000,
+                maxResolution: 30,
+                minResolution: 2
+            })
+        });
+    </script>
 
 </body>
 

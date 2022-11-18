@@ -211,7 +211,8 @@ span.description {
   display: inline-block;
 }
 
-div.img img {
+div.img img,
+div.img div#map {
   background-color: #ffffff;
   padding: 10px;
   display: block;
