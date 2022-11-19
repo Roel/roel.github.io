@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>A view on Ghent</title>
+  <link rel="stylesheet" type="text/css" href="../../style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+  <script src="./js/ol.js"></script>
+  <link rel="stylesheet" href="./css/ol.css">
+
+  <style>
+    div#map {
+      height: 620px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header">
+    <img src="../../me.png">
+    <h1>Roel Huybrechts</h1>
+    <ul id="menu">
+      <li><a href="/contact">Contact</li>
+      <li><a href="/">Home</a></li>
+    </ul>
+  </div>
+
+  <h1>A view on Ghent</h1>
+  <h2>Showing off the beauty of Ghent and open data</h2>
+
+  <div class="center">
+    <div class="img">
+      <div id="map"></div>
+      <p><span class="description">A view on Ghent</span></p>
+    </div>
+  </div>
+
+  <p>First of all, <em>ceci n'est pas une carte</em>. This is not a map. Observant viewers will notice it is lacking a
+    scale, a legend, an indication of the north.</p>
+
+  <p>It is merely an image. A bird's eye view of the beautiful city of Ghent. Unlike maps, it is not intended for
+    navigation, education or transferring information. Its sole purpuse is admiration.</p>
+
+  <p>So what <em>are</em> we looking at then? You're (mostly) looking at the 1 meter resolution digital surface model
+    (DMHVII), made available by Agentschap Informatie Vlaanderen based on airborne LiDAR measurements of the surface.
+  </p>
+
+  <p>By using GDAL's sloping algorithm, I transformed the DSM pixels from absolute height values in meters to sloping
+    angles between 0 and 90 degrees (based on adjacent pixels). By coloring the image from light (0 degree slope, a.k.a.
+    flat) to dark (90 degree slope), you get a stunning view from the sky.</p>
+
+  <p>Then I added the water bodies. Because water surfaces reflect the LiDAR beams in various directions, water surfaces
+    are not very beautiful in the resulting DSM. So I cut out the water from the OpenStreetMap dataset and overlayed it
+    onto the image.</p>
+
+  <div class="center">
+    <div class="img"><img src="img/gravensteen-msk.png"
+        alt="Gravensteen on the left, Museum voor Schone Kunsten on the right.">
+      <p><span class="description">Gravensteen on the left, Museum voor Schone Kunsten on the right.</span>
+      </p>
+    </div>
+  </div>
+
+  <p>To have it absolutely perfect I had to perform one last task: because the water in OSM covers the whole area, I had
+    to cut out the bridges (since they obviously should be over the water). I used the bridge surfaces from the
+    <span title="Grootschalig Referentie Bestand">GRB</span> dataset (again from Agentschap Informatie Vlaanderen) for
+    this task, because they contain the actual bridge surface instead of a line, where I would have to guess the width,
+    which wouldn't have been nearly so perfect.
+  </p>
+
+  <div class="center">
+    <div class="img"><img src="img/stpieters-leopoldskazerne.png"
+        alt="Sint-Pieters church and abbey on the left, Leopoldskazerne on the right.">
+      <p><span class="description">Sint-Pieters church and abbey on the left, Leopoldskazerne on the right.</span>
+      </p>
+    </div>
+  </div>
+
+  <p>The result is a bird's eye view on Ghent with a level of detail you've probably never seen before. Since we now
+    know what we're looking at we can cleary see the differences between the different kinds of roofs: buildings with a
+    flat roof are white with a dark border, saddle roofs also have a dark border but are grey (45° angle) with a white
+    line separating both sides of the roof (rooftop line is flat). Can you spot the dome roof of the Wintercircus or the
+    characterisic roof of the Van Eyck swimming pool?</p>
+
+  <p>The level of detail is amazing: you can cleary identify churches, museums, railroads and parks. You can identify
+    individual trees marking the Coupure. Did you spot the hill that can be found in the Arbed park?</p>
+
+  <p>You can see the trains parked at the Dampoort bundle and the signs above the motorway indicating you should take
+    the exit to visit Ghent. Any idea what the parallel dotted lines might be going north-east near Dok Noord?</p>
+
+  <p>I'll leave you exploring and admiring some more ;)</p>
+
+  <p class="end">&mdash; Roel</p>
+
+  <script type="text/javascript">
+    var map = new ol.Map({
+      target: 'map',
+      controls: [],
+      layers: [
+        new ol.layer.Group({
+          title: 'Overlay',
+          layers: [
+            new ol.layer.Tile({
+              title: 'Overlay',
+              // opacity: 0.7,
+              source: new ol.source.TileImage({
+                attributions: '',
+                tileGrid: new ol.tilegrid.TileGrid({
+                  extent: [0, -9933, 7016, 0],
+                  origin: [0, -9933],
+                  resolutions: [64, 32, 16, 8, 4, 2, 1],
+                  tileSize: [256, 256]
+                }),
+                tileUrlFunction: function (tileCoord) {
+                  return ('./map/{z}/{x}/{y}.png'
+                    .replace('{z}', String(tileCoord[0]))
+                    .replace('{x}', String(tileCoord[1]))
+                    .replace('{y}', String(- 1 - tileCoord[2])));
+                },
+              })
+            }),
+          ]
+        }),
+      ],
+      view: new ol.View({
+        // center: [3508.000000, -4966.500000],
+        center: [3508.000000, -2966.500000],
+        resolution: 9.000000,
+        maxResolution: 30,
+        minResolution: 1
+      })
+    });
+  </script>
+
+</body>
+
+</html>
